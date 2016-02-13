@@ -429,9 +429,11 @@ public class SwipeToDismissTouchListener<SomeCollectionView extends ViewAdapter>
     private void processPendingDismisses(final PendingDismissData pendingDismissData) {
         mPendingDismiss = null;
         final ViewGroup.LayoutParams lp = pendingDismissData.rowContainer.container.getLayoutParams();
-        final int originalHeight = pendingDismissData.rowContainer.container.getHeight();
+        final int originalLpHeight = lp.height;
 
-        ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(mAnimationTime);
+        ValueAnimator animator = ValueAnimator.ofInt(
+                pendingDismissData.rowContainer.container.getHeight(),
+                1).setDuration(mAnimationTime);
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -447,7 +449,7 @@ public class SwipeToDismissTouchListener<SomeCollectionView extends ViewAdapter>
                         pendingDismissData.rowContainer.undoContainer.setTranslationX(0);
                         pendingDismissData.rowContainer.undoContainer.setAlpha(1);
 
-                        lp.height = originalHeight;
+                        lp.height = originalLpHeight;
                         pendingDismissData.rowContainer.container.setLayoutParams(lp);
                     }
                 });
